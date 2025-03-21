@@ -1,0 +1,44 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    height: 100%;
+}
+
+.app-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.main-content {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 80px;
+}
+
+/* Adjust padding for different screen sizes */
+@media (max-width: 768px) {
+    .main-content {
+        padding-bottom: 100px; /* More padding for mobile */
+    }
+}
+
+@media (min-width: 1200px) {
+    .main-content {
+        padding-bottom: 60px; /* Less padding for larger screens */
+    }
+} 
