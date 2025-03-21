@@ -3,8 +3,17 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import axios from "axios";
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
-function App() {
+import About from './pages/About';
+import AdminPage from './pages/AdminPage';
+import Contact from './pages/Contact';
+import Home from './pages/Home';
+import Login from './login';
+import SignUp from './pages/SignUp';
+
+
+function AppOriginal() {
   const [count, setCount] = useState(0);
   const [array, setArray] = useState([]);
 
@@ -52,4 +61,4 @@ function App() {
   )
 }
 
-export default App
+export default AppOriginal
