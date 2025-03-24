@@ -28,7 +28,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    gap: 2rem;
+    gap: 1rem;
     min-height: 500px;
 }
 
@@ -38,6 +38,8 @@
     flex-direction: column;
     gap: 2rem;
     height: 100%;
+    min-height: 420px;
+    max-height: 420px;
 }
 
 .contact-image-container {
@@ -50,19 +52,24 @@
 
 .contact-image {
     width: 100%;
+    max-height: 420px;
+    min-height: 420px;
     height: 100%;
-    object-fit: c;
+    object-fit: cover;
     border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .contact-info-card {
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     background-color: var(--header-blue);
     height: 100%;
     display: flex;
     align-items: center;
+    min-height: 420px;
+    max-height: 420px;
 }
 
 .contact-info-content {
@@ -70,22 +77,27 @@
     flex-direction: column;
     gap: 2rem;
     width: 100%;
+    height: 100%;
+    justify-content: center;
 }
 
 .contact-section-title {
     font-family: var(--font-family-primary);
     font-size: 2rem;
     color: white;
-    margin-bottom: 1rem;
+    margin: 0;
     text-shadow: var(--text-outline);
     text-align: center;
 }
 
 .contact-details {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
     text-align: center;
+    flex: 1;
+    align-items: center;
 }
 
 .contact-item {
@@ -93,6 +105,7 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    flex: 1;
 }
 
 .contact-icon {
@@ -123,6 +136,25 @@
     margin: 0;
 }
 
+.opening-hours-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.opening-hours-title {
+    font-family: var(--font-family-primary);
+    font-size: 3rem;
+    color: var(--header-blue);
+    margin: 0;
+    text-shadow: var(--text-outline);
+}
+
+.opening-hours-line {
+    width: 40%;
+}
+
 @media (max-width: 768px) {
     .contact-page {
         width: 100%;
@@ -137,6 +169,7 @@
         flex-direction: column;
         padding: 0;
         min-height: auto;
+        gap: 0.5rem;
     }
 
     .contact-container {
@@ -146,6 +179,10 @@
     .contact-image-container {
         width: 100%;
         height: 300px;
+    }
+
+    .contact-image {
+        max-height: 400px;
     }
 
     .contact-title {
@@ -170,5 +207,22 @@
 
     .contact-text p {
         font-size: 0.9rem;
+    }
+
+    .opening-hours-title {
+        font-size: 2rem;
+    }
+
+    .contact-details {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .contact-item {
+        width: 100%;
+    }
+
+    .opening-hours-container {
+        padding: 0.5rem 0;
     }
 } 

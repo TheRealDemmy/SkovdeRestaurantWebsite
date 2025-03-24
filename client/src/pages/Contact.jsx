@@ -14,16 +14,8 @@ const Contact = () => {
                 <div className="contact-container">
                     <div className="contact-info-card">
                         <div className="contact-info-content">
-                            <h4 className="contact-section-title">Get in Touch</h4>
+                            <h3 className="contact-section-title">Interested in featuring your restaurant on our website?</h3>
                             <div className="contact-details">
-                                <div className="contact-item">
-                                    <LocationOnIcon className="contact-icon" />
-                                    <div className="contact-text">
-                                        <h6>Address</h6>
-                                        <p>123 Restaurant Street, Skövde, Sweden</p>
-                                    </div>
-                                </div>
-
                                 <div className="contact-item">
                                     <PhoneIcon className="contact-icon" />
                                     <div className="contact-text">
@@ -51,6 +43,10 @@ const Contact = () => {
                     />
                 </div>
             </div>
+            <div className="opening-hours-container">
+                <h2 className="opening-hours-title">We're available from 9 AM to 5 PM!</h2>
+            </div>
+            <hr className="opening-hours-line"/>
         </div>
     );
 };
