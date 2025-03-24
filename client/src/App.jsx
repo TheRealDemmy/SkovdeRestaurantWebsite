@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Contact from './pages/Contact';
 import './styles/Layout.css';
 
+
 function App() {
   return (
     <Router>

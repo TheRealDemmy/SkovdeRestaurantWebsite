@@ -1,33 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import MenuIcon from '@mui/icons-material/Menu';
 import '../styles/Header.css';
 
 const Header = () => {
+    const [showMenu, setShowMenu] = useState(false);
+
+    const toggleMenu = () => {
+        setShowMenu(!showMenu);
+    };
+
     return (
-        <AppBar className="header">
-            <Toolbar>
+        <header className={`header ${showMenu ? 'dropdown-active' : ''}`}>
+            <div className="header-content">
+                <button className="menu-button" onClick={toggleMenu}>
+                    <MenuIcon />
+                    <span>Menu</span>
+                </button>
                 <div className="logo-container">
                     <img 
                         src="/assets/SkovdeSymbol.png" 
                         alt="Skövde Symbol" 
                         className="logo-image"
                     />
-                    <Typography variant="h6" component={Link} to="/" className="logo">
+                    <Link to="/" className="logo">
                         Elin's Longhouse
-                    </Typography>
+                    </Link>
                 </div>
-                <div className="nav-buttons">
-                    <Button color="inherit" component={Link} to="/">Home</Button>
-                    <Button color="inherit" component={Link} to="/contact">Contact</Button>
-                    <Button color="inherit" component={Link} to="/login">Login</Button>
-                    <Button color="inherit" component={Link} to="/register">Register</Button>
+                <div className={`dropdown-menu ${showMenu ? 'show' : ''}`}>
+                    <Link to="/" className="dropdown-link">Home</Link>
+                    <Link to="/contact" className="dropdown-link">Contact</Link>
+                    <Link to="/login" className="dropdown-link">Login</Link>
+                    <Link to="/register" className="dropdown-link">Register</Link>
                 </div>
-            </Toolbar>
-        </AppBar>
+            </div>
+        </header>
     );
 };
 

@@ -1,119 +1,57 @@
-import React, { useState } from 'react';
-import { Container, Typography, Box, TextField, Button, Grid, Paper } from '@mui/material';
+import React from 'react';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
 import '../styles/Contact.css';
 
 const Contact = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-    });
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Here we'll handle the form submission later
-        console.log('Form submitted:', formData);
-    };
-
     return (
-        <Container maxWidth="lg" className="contact-container">
-            <Typography variant="h3" className="contact-title">
-                Contact Elin's Longhouse
-            </Typography>
-            
-            <Grid container spacing={4}>
-                {/* Contact Information */}
-                <Grid item xs={12} md={4}>
-                    <Paper className="contact-info">
-                        <Typography variant="h5" gutterBottom>
-                            Get in Touch
-                        </Typography>
-                        <Typography variant="body1" paragraph>
-                            Have questions about local dining in Skövde? We're here to help you discover the authentic flavors of our city.
-                        </Typography>
-                        <Box className="info-item">
-                            <Typography variant="subtitle1">Email</Typography>
-                            <Typography variant="body1">contact@elinslonghouse.com</Typography>
-                        </Box>
-                        <Box className="info-item">
-                            <Typography variant="subtitle1">Location</Typography>
-                            <Typography variant="body1">Skövde, Sweden</Typography>
-                        </Box>
-                    </Paper>
-                </Grid>
+        <div className="contact-page">
+            <div className="contact-title-container">
+                <h2 className="contact-title">Contact Us</h2>
+            </div>
+            <div className="contact-content">
+                <div className="contact-container">
+                    <div className="contact-info-card">
+                        <div className="contact-info-content">
+                            <h4 className="contact-section-title">Get in Touch</h4>
+                            <div className="contact-details">
+                                <div className="contact-item">
+                                    <LocationOnIcon className="contact-icon" />
+                                    <div className="contact-text">
+                                        <h6>Address</h6>
+                                        <p>123 Restaurant Street, Skövde, Sweden</p>
+                                    </div>
+                                </div>
 
-                {/* Contact Form */}
-                <Grid item xs={12} md={8}>
-                    <Paper className="contact-form">
-                        <form onSubmit={handleSubmit}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        label="Name"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        label="Email"
-                                        name="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        label="Subject"
-                                        name="subject"
-                                        value={formData.subject}
-                                        onChange={handleChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        label="Message"
-                                        name="message"
-                                        multiline
-                                        rows={4}
-                                        value={formData.message}
-                                        onChange={handleChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        size="large"
-                                        className="submit-button"
-                                    >
-                                        Send Message
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </form>
-                    </Paper>
-                </Grid>
-            </Grid>
-        </Container>
+                                <div className="contact-item">
+                                    <PhoneIcon className="contact-icon" />
+                                    <div className="contact-text">
+                                        <h6>Phone</h6>
+                                        <p>+46 123 456 789</p>
+                                    </div>
+                                </div>
+
+                                <div className="contact-item">
+                                    <EmailIcon className="contact-icon" />
+                                    <div className="contact-text">
+                                        <h6>Email</h6>
+                                        <p>info@skovderestaurant.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="contact-image-container">
+                    <img 
+                        src='/src/assets/SkovdeCenter.jpg'
+                        alt="Skovde Center" 
+                        className="contact-image"
+                    />
+                </div>
+            </div>
+        </div>
     );
 };
 

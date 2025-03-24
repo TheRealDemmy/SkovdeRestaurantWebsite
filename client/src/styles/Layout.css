@@ -8,6 +8,12 @@ html, body {
     height: 100%;
 }
 
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 .app-wrapper {
     min-height: 100vh;
     display: flex;
@@ -22,21 +28,16 @@ html, body {
 }
 
 .main-content {
-    flex-grow: 1;
+    flex: 1;
+    margin-top: 52px; /* Height of the header */
+    padding: var(--spacing-lg) 0;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 80px;
 }
 
 /* Adjust padding for different screen sizes */
-@media (max-width: 768px) {
-    .main-content {
-        padding-bottom: 100px; /* More padding for mobile */
-    }
-}
-
 @media (min-width: 1200px) {
     .main-content {
         padding-bottom: 60px; /* Less padding for larger screens */

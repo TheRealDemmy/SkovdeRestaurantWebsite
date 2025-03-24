@@ -1,25 +1,44 @@
-.home-container {
-    margin-top: 4rem;
+.wrapper1 {
+    width: 100%;
+    padding: 2rem 0;
+    background-color: var(--background-color);
+}
+
+.wrapper2 {
+    width: 100%;
+    padding: 2rem 0;
+    background-color: var(--background-alt);
+}
+
+.home-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.initial-home-container {
+    margin-top: 6px;
     margin-bottom: 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 200px); /* Account for header and footer */
-    text-align: center;
-    padding: 0 10%;
-    width: 100%;
-    max-width: 1200px;
+    justify-content: flex-start;
+    min-height: calc(80vh - 64px);
+    padding: 2rem 0;
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
+    text-align: center;
     position: relative;
     background-image: url('../assets/SkovdeBackground1.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
-.home-container::before {
+.initial-home-container::before {
     content: '';
     position: absolute;
     top: 0;
@@ -30,24 +49,70 @@
     z-index: 1;
 }
 
-.welcome-title {
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    width: 100%;
-    max-width: 800px;
+.welcome-title, .welcome-text, .search-container {
     position: relative;
     z-index: 2;
 }
 
-.welcome-text {
-    text-align: center;
-    color: #666;
-    margin-bottom: 2rem;
+.search-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+}
+
+.search-input .MuiOutlinedInput-root {
+    border-radius: 25px;
+    background-color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.search-input .MuiOutlinedInput-root:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.search-input .MuiOutlinedInput-input {
+    color: #000;
+}
+
+.search-input .MuiOutlinedInput-input::placeholder {
+    color: rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+}
+
+.search-button {
+    color: var(--header-blue) !important;
+    padding: 8px !important;
+}
+
+.search-button:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.welcome-title {
+    font-family: var(--font-family-primary);
+    font-size: 3.5rem;
+    color: #FFD700;
+    margin-bottom: var(--spacing-md);
     width: 100%;
     max-width: 800px;
-    position: relative;
-    z-index: 2;
+    text-shadow: var(--text-outline);
+}
+
+.welcome-text {
+    font-family: var(--font-family-secondary);
+    font-size: 1.5rem;
+    color: #FFFFFF;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-lg);
+    line-height: 1.6;
+    width: 100%;
+    max-width: 800px;
+    text-shadow: var(--text-outline);
 }
 
 .button-container {
@@ -62,8 +127,325 @@
     z-index: 2;
 }
 
+.featured-section {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.featured-title {
+    font-family: var(--font-family-primary);
+    font-size: 2.5rem;
+    color: var(--header-blue);
+    text-align: center;
+    margin: 0;
+    text-shadow: var(--text-outline);
+}
+
+.featured-restaurant {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+    background-color: var(--header-blue);
+    border-radius: 10px;
+}
+
+.restaurant-image {
+    flex: 1;
+    min-width: 300px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.restaurant-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.restaurant-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding-top: 1rem;
+}
+
+.restaurant-name {
+    font-family: var(--font-family-primary);
+    font-size: 2.5rem;
+    color: var(--header-text);
+    margin: 0;
+    text-shadow: var(--text-outline);
+}
+
+.restaurant-rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.rating-text {
+    font-family: var(--font-family-secondary);
+    font-size: 1.2rem;
+    color: var(--header-text);
+    text-shadow: var(--text-outline);
+}
+
+.restaurant-description {
+    font-family: var(--font-family-secondary);
+    font-size: 1.1rem;
+    color: var(--header-text);
+    text-shadow: var(--text-outline);
+    line-height: 1.5;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.restaurant-tags {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.restaurant-tag {
+    background-color: var(--header-text);
+    color: var(--header-blue);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-family: var(--font-family-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+.restaurant-grid {
+    width: 80%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.restaurant-box {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.restaurant-box:hover {
+    transform: translateY(-5px);
+}
+
+.restaurant-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.restaurant-box-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+}
+
+.restaurant-box-name {
+    font-family: var(--font-family-primary);
+    font-size: 1.5rem;
+    margin: 0;
+    text-shadow: var(--text-outline);
+}
+
+.restaurant-box-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.restaurant-box-rating .rating-text {
+    font-size: 1rem;
+}
+
 @media (max-width: 768px) {
-    .home-container {
-        padding: 0 5%;
+    .wrapper1, .wrapper2 {
+        padding: 1rem 0;
     }
+
+    .initial-home-container {
+        width: 90%;
+        padding: 1rem 0;
+    }
+    
+    .welcome-title {
+        font-size: 2.5rem;
+    }
+    
+    .welcome-text {
+        font-size: 1.2rem;
+    }
+
+    .featured-section {
+        width: 90%;
+    }
+
+    .featured-title {
+        font-size: 2rem;
+    }
+
+    .featured-restaurant {
+        width: 90%;
+        flex-direction: column;
+        padding: 0.75rem;
+    }
+
+    .restaurant-image {
+        min-width: 100%;
+        height: 200px;
+    }
+
+    .restaurant-info {
+        padding-top: 0.75rem;
+    }
+
+    .restaurant-name {
+        font-size: 2rem;
+    }
+
+    .restaurant-description {
+        font-size: 1rem;
+    }
+
+    .restaurant-tag {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .restaurant-grid {
+        width: 90%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 1rem 0;
+    }
+
+    .restaurant-box {
+        height: 200px;
+    }
+
+    .restaurant-box-name {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .restaurant-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.map-section {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.map-title {
+    font-family: var(--font-family-primary);
+    font-size: 2.5rem;
+    color: var(--header-blue);
+    text-align: center;
+    margin: 0;
+    text-shadow: var(--text-outline);
+}
+
+.map-container {
+    width: 100%;
+    height: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 768px) {
+    .map-section {
+        width: 90%;
+    }
+
+    .map-title {
+        font-size: 2rem;
+    }
+
+    .map-container {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .map-container {
+        height: 300px;
+    }
+}
+
+.map-popup {
+    padding: 10px;
+    min-width: 200px;
+}
+
+.map-popup h3 {
+    margin: 0 0 5px 0;
+    font-family: var(--font-family-primary);
+    font-size: 1.2rem;
+    color: var(--header-blue);
+}
+
+.map-popup p {
+    margin: 0 0 5px 0;
+    font-family: var(--font-family-secondary);
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.map-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.map-rating span {
+    font-family: var(--font-family-secondary);
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+/* Fix for Leaflet popup styles */
+.leaflet-popup-content-wrapper {
+    border-radius: 10px;
+    box-shadow: var(--shadow-md);
+}
+
+.leaflet-popup-content {
+    margin: 0;
+    padding: 0;
+}
+
+.leaflet-popup-tip {
+    background: white;
 } 
