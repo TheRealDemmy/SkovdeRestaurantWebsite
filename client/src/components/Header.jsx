@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Header.css';
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState(false);
+    const { isAuthenticated, isAdmin, logout } = useAuth();
 
     const toggleMenu = () => {
         setShowMenu(!showMenu);
+    };
+
+    const handleLogout = () => {
+        logout();
+        setShowMenu(false);
     };
 
     return (
@@ -30,8 +37,19 @@ const Header = () => {
                 <div className={`dropdown-menu ${showMenu ? 'show' : ''}`}>
                     <Link to="/" className="dropdown-link">Home</Link>
                     <Link to="/contact" className="dropdown-link">Contact</Link>
-                    <Link to="/login" className="dropdown-link">Login</Link>
-                    <Link to="/register" className="dropdown-link">Register</Link>
+                    {!isAuthenticated ? (
+                        <Link to="/signup" className="dropdown-link">Sign Up</Link>
+                    ) : (
+                        <>
+                            <Link to="/profile" className="dropdown-link">My Profile</Link>
+                            {isAdmin && (
+                                <Link to="/admin" className="dropdown-link">Admin</Link>
+                            )}
+                            <button onClick={handleLogout} className="dropdown-link logout-button">
+                                Logout
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
         </header>

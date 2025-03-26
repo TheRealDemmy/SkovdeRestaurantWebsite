@@ -1,6 +1,25 @@
 {
+  "name": "skovde-restaurant-website",
+  "version": "1.0.0",
+  "description": "A website for Skovde restaurants",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "seed": "node server/seed.js"
+  },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
+    "mongodb": "^6.15.0",
+    "mongoose": "^7.0.3",
     "react-leaflet": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }

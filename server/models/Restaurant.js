@@ -10,53 +10,53 @@ const restaurantSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    address: {
-        street: String,
-        city: String,
-        postalCode: String,
-        country: String
-    },
     cuisine: {
         type: String,
         required: true
     },
-    priceRange: {
+    price: {
         type: String,
-        enum: ['$', '$$', '$$$', '$$$$'],
         required: true
     },
+    address: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        default: null
+    },
     openingHours: {
-        monday: { open: String, close: String },
-        tuesday: { open: String, close: String },
-        wednesday: { open: String, close: String },
-        thursday: { open: String, close: String },
-        friday: { open: String, close: String },
-        saturday: { open: String, close: String },
-        sunday: { open: String, close: String }
+        type: String,
+        default: null
     },
-    contact: {
-        phone: String,
-        email: String,
-        website: String
-    },
-    images: [{
-        type: String  // URLs to images
-    }],
-    averageRating: {
+    rating: {
         type: Number,
-        default: 0
+        default: 0,
+        min: 0,
+        max: 5
     },
-    totalReviews: {
-        type: Number,
-        default: 0
+    imageUrl: {
+        type: String,
+        default: '/DefaultImage.jpg'
     },
-    features: [{
-        type: String  // e.g., ['WiFi', 'Parking', 'Outdoor Seating']
-    }],
-    createdAt: {
-        type: Date,
-        default: Date.now
+    isFeatured: {
+        type: Boolean,
+        default: false
     }
+}, {
+    timestamps: true
 });
 
-module.exports = mongoose.model('Restaurant', restaurantSchema); 
+// Index for featured restaurants
+restaurantSchema.index({ isFeatured: 1 });
+
+const Restaurant = mongoose.model('Restaurant', restaurantSchema);
+
+module.exports = Restaurant; 

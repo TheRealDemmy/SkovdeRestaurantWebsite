@@ -21,20 +21,22 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+    reviews: {
+        type: Number,
+        default: 0
+    },
     profilePicture: {
-        type: String
+        type: String,
+        default: '/DefaultImage.jpg'
     },
-    location: {
-        type: String
-    },
-    reviews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review'
-    }],
-    favorites: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Restaurant'
-    }]
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 // Hash password before saving

@@ -35,8 +35,8 @@
 }
 
 .logo-image {
+    width: 40px;
     height: 40px;
-    width: auto;
 }
 
 .logo {
@@ -98,7 +98,7 @@
 
 .dropdown-link {
     display: block;
-    width: 100%;
+    width: 80%;
     padding: var(--spacing-md);
     text-decoration: none;
     color: var(--header-text);
@@ -118,19 +118,6 @@
     color: var(--header-hover);
 }
 
-.site-name {
-    font-family: var(--font-family-primary);
-    font-size: 1.5rem;
-    color: var(--header-text);
-    text-decoration: none;
-    font-weight: bold;
-    text-shadow: 
-        -1px -1px 0 #000,
-        1px -1px 0 #000,
-        -1px 1px 0 #000,
-        1px 1px 0 #000;
-}
-
 @media (max-width: 768px) {
     .header {
         width: 90%;
@@ -139,40 +126,23 @@
     .header-content {
         padding: 0 var(--spacing-sm);
     }
-    
+
     .logo-container {
         flex-direction: column;
         align-items: center;
         gap: var(--spacing-xs);
     }
-    
-    .logo {
+
+    .logo-image {
         width: 40px;
         height: 40px;
     }
     
-    .site-name {
+    .logo {
         font-size: 1.2rem;
     }
     
     .menu-button {
         display: block;
-    }
-    
-    .nav-links {
-        display: none;
-    }
-    
-    .nav-links.active {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: var(--header-blue);
-        padding: var(--spacing-sm);
-        box-shadow: var(--shadow-sm);
-        gap: var(--spacing-sm);
     }
 } 

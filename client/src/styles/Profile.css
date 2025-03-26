@@ -1,0 +1,365 @@
+.profile-page {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.profile-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.profile-header h1 {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.edit-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.edit-button:hover {
+    transform: translateY(-1px);
+}
+
+.profile-picture-section {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease-out;
+}
+
+.profile-picture:hover {
+    transform: scale(1.05);
+}
+
+.profile-picture-upload {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.upload-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+    display: inline-block;
+}
+
+.upload-button:hover {
+    transform: translateY(-1px);
+}
+
+.profile-picture-input {
+    display: none;
+}
+
+.profile-info {
+    margin-bottom: 2rem;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.info-group {
+    margin-bottom: 1.5rem;
+}
+
+.info-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.info-group p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.edit-form {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.save-button, .cancel-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.save-button {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.save-button:hover {
+    transform: translateY(-1px);
+}
+
+.cancel-button {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.cancel-button:hover {
+    transform: translateY(-1px);
+}
+
+.error-message, .success-message {
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+.error-message {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border: 1px solid var(--error-border);
+}
+
+.success-message {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    border: 1px solid var(--success-border);
+}
+
+.reviews-section {
+    margin-top: 3rem;
+}
+
+.reviews-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.reviews-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.review-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.review-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.review-card h3 {
+    margin: 0 0 1rem;
+    color: var(--text-primary);
+}
+
+.rating {
+    margin-bottom: 1rem;
+}
+
+.star {
+    color: #ddd;
+    font-size: 1.2rem;
+}
+
+.star.filled {
+    color: var(--star-color);
+}
+
+.review-card p {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+.review-card small {
+    color: #999;
+}
+
+.skeleton {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: var(--skeleton-color);
+    margin: 0 auto;
+}
+
+.skeleton-text {
+    background-color: var(--skeleton-color);
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 1.5rem;
+    }
+
+    .reviews-list {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .edit-button,
+    .save-button,
+    .cancel-button {
+        width: 100%;
+    }
+}
+
+:root {
+    --primary-color: #0066cc;
+    --primary-rgb: 0, 102, 204;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --text-primary: #2d3748;
+    --text-secondary: #4a5568;
+    --border-color: #e2e8f0;
+    --skeleton-color: #f0f0f0;
+    --star-color: #ffc107;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --error-bg: #fff5f5;
+    --error-text: #c53030;
+    --error-border: #feb2b2;
+    --success-bg: #f0fff4;
+    --success-text: #2f855a;
+    --success-border: #9ae6b4;
+}
+
+/* Update featured restaurant styles */
+.featured-restaurant {
+    width: 80%;
+    margin: 2rem auto;
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+    background-color: var(--header-blue);
+    border-radius: 10px;
+}
+
+.restaurant-card {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.restaurant-card .image-container {
+    flex: 0 0 40%;
+    max-width: 40%;
+}
+
+.restaurant-card .restaurant-info {
+    flex: 1;
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .restaurant-card {
+        flex-direction: column;
+    }
+
+    .restaurant-card .image-container {
+        flex: 0 0 100%;
+        max-width: 100%;
+        height: 200px;
+    }
+
+    .restaurant-card .restaurant-info {
+        padding: 1.5rem;
+    }
+} 
