@@ -115,7 +115,8 @@ router.post('/', verifyToken, verifyAdmin, upload.single('image'), async (req, r
             phone: req.body.phone,
             email: req.body.email || null,
             openingHours: req.body.openingHours || null,
-            isFeatured: req.body.isFeatured === 'true'
+            isFeatured: req.body.isFeatured === 'true',
+            coordinates: JSON.parse(req.body.coordinates)
         };
 
         // Only set imageUrl if an image was uploaded

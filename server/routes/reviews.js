@@ -93,9 +93,10 @@ router.post('/', verifyToken, async (req, res) => {
         restaurant.rating = averageRating;
         await restaurant.save();
 
-        // Add review to user's reviews
+        // Update user's review count and review IDs
         await User.findByIdAndUpdate(req.userId, {
-            $push: { reviews: savedReview._id }
+            $inc: { reviewCount: 1 },
+            $push: { reviewIds: savedReview._id }
         });
 
         // Populate user and restaurant details
@@ -172,9 +173,10 @@ router.delete('/:id', verifyToken, async (req, res) => {
         restaurant.rating = averageRating;
         await restaurant.save();
 
-        // Remove review from user's reviews array
+        // Update user's review count and review IDs
         await User.findByIdAndUpdate(review.user, {
-            $pull: { reviews: review._id }
+            $inc: { reviewCount: -1 },
+            $pull: { reviewIds: review._id }
         });
 
         res.json({ message: 'Review deleted successfully' });

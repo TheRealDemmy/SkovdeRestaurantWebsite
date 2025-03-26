@@ -9,12 +9,13 @@ import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
-import UserProfile from './pages/UserProfile';
-import Restaurant from './pages/Restaurant';
+import RestaurantProfile from './pages/RestaurantProfile';
+import Restaurants from './pages/Restaurants';
 import AddUser from './pages/AddUser';
 import EditUser from './pages/EditUser';
 import AddRestaurant from './pages/AddRestaurant';
 import EditRestaurant from './pages/EditRestaurant';
+import AboutUs from './pages/AboutUs';
 import './styles/Layout.css';
 
 const theme = createTheme({
@@ -42,6 +43,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/about" element={<AboutUs />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/admin/users/add" element={<AddUser />} />
                 <Route path="/admin/users/edit/:id" element={<EditUser />} />
@@ -49,8 +51,9 @@ function App() {
                 <Route path="/admin/restaurants/edit/:id" element={<EditRestaurant />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/profile/:id" element={<UserProfile />} />
-                <Route path="/restaurant/:id" element={<Restaurant />} />
+                <Route path="/profile/:id" element={<Profile />} />
+                <Route path="/restaurant/:id" element={<RestaurantProfile />} />
+                <Route path="/restaurants" element={<Restaurants />} />
               </Routes>
             </main>
             <Footer />

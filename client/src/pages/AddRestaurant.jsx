@@ -1,7 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import '../styles/AddRestaurant.css';
+
+// Fix for default marker icons
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: markerIcon2x,
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+});
+
+// Component to handle map clicks
+const LocationMarker = ({ onLocationSelect }) => {
+    useMapEvents({
+        click(e) {
+            onLocationSelect(e.latlng);
+        },
+    });
+    return null;
+};
 
 const AddRestaurant = () => {
     const [formData, setFormData] = useState({
@@ -13,7 +37,8 @@ const AddRestaurant = () => {
         email: '',
         description: '',
         openingHours: '',
-        isFeatured: false
+        isFeatured: false,
+        coordinates: null
     });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +66,13 @@ const AddRestaurant = () => {
         setError('');
     };
 
+    const handleLocationSelect = (latlng) => {
+        setFormData(prev => ({
+            ...prev,
+            coordinates: [latlng.lat, latlng.lng]
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -49,8 +81,8 @@ const AddRestaurant = () => {
         setIsLoading(true);
 
         try {
-            if (!formData.name || !formData.cuisine || !formData.price || !formData.address || !formData.phone) {
-                throw new Error('Please fill in all required fields (Name, Cuisine Type, Price Range, Address, and Phone)');
+            if (!formData.name || !formData.cuisine || !formData.price || !formData.address || !formData.phone || !formData.coordinates) {
+                throw new Error('Please fill in all required fields and select a location on the map');
             }
 
             const token = localStorage.getItem('token');
@@ -58,8 +90,12 @@ const AddRestaurant = () => {
 
             const formDataToSend = new FormData();
             Object.keys(formData).forEach(key => {
-                if (formData[key] !== '') {
-                    formDataToSend.append(key, formData[key]);
+                if (formData[key] !== null && formData[key] !== '') {
+                    if (key === 'coordinates') {
+                        formDataToSend.append(key, JSON.stringify(formData[key]));
+                    } else {
+                        formDataToSend.append(key, formData[key]);
+                    }
                 }
             });
             if (image) {
@@ -199,6 +235,30 @@ const AddRestaurant = () => {
                         />
                     </div>
 
+                    <div className="form-group map-container">
+                        <label>Location on Map *</label>
+                        <div className="map-wrapper">
+                            <MapContainer
+                                center={[58.3913, 13.8452]} // Skövde coordinates
+                                zoom={13}
+                                style={{ height: '400px', width: '100%' }}
+                            >
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                />
+                                <LocationMarker onLocationSelect={handleLocationSelect} />
+                                {formData.coordinates && (
+                                    <Marker 
+                                        position={formData.coordinates}
+                                        icon={new L.Icon.Default()}
+                                    />
+                                )}
+                            </MapContainer>
+                        </div>
+                        <p className="map-instructions">Click on the map to select the restaurant location</p>
+                    </div>
+
                     <div className="form-group">
                         <label htmlFor="description">Description</label>
                         <textarea
@@ -208,7 +268,6 @@ const AddRestaurant = () => {
                             onChange={handleChange}
                             disabled={isLoading}
                             placeholder="Enter restaurant description"
-                            rows="4"
                         />
                     </div>
 
@@ -221,21 +280,8 @@ const AddRestaurant = () => {
                             value={formData.openingHours}
                             onChange={handleChange}
                             disabled={isLoading}
-                            placeholder="e.g., Mon-Fri: 9:00 AM - 10:00 PM"
+                            placeholder="e.g., Mon-Fri: 11:00-22:00"
                         />
-                    </div>
-
-                    <div className="form-group checkbox">
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="isFeatured"
-                                checked={formData.isFeatured}
-                                onChange={handleChange}
-                                disabled={isLoading}
-                            />
-                            Feature this restaurant
-                        </label>
                     </div>
 
                     <div className="form-group">
@@ -248,31 +294,31 @@ const AddRestaurant = () => {
                             onChange={handleImageChange}
                             disabled={isLoading}
                         />
+                        {imagePreview && (
+                            <div className="image-preview">
+                                <img src={imagePreview} alt="Preview" />
+                            </div>
+                        )}
                     </div>
 
-                    {error && (
-                        <div className="error-message shake">
-                            {error}
-                        </div>
-                    )}
-
-                    <div className="button-group">
-                        <button 
-                            type="submit" 
-                            className="submit-button"
-                            disabled={isLoading}
-                        >
-                            {isLoading ? 'Creating Restaurant...' : 'Create Restaurant'}
-                        </button>
-                        <button 
-                            type="button" 
-                            className="cancel-button"
-                            onClick={() => navigate('/admin')}
-                            disabled={isLoading}
-                        >
-                            Cancel
-                        </button>
+                    <div className="form-group checkbox-group">
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="isFeatured"
+                                checked={formData.isFeatured}
+                                onChange={handleChange}
+                                disabled={isLoading}
+                            />
+                            Featured Restaurant
+                        </label>
                     </div>
+
+                    {error && <div className="error-message">{error}</div>}
+
+                    <button type="submit" className="submit-button" disabled={isLoading}>
+                        {isLoading ? 'Creating...' : 'Create Restaurant'}
+                    </button>
                 </form>
             </div>
         </div>

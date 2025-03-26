@@ -42,10 +42,11 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Serve static files from uploads directory with CORS headers
 app.use('/uploads', (req, res, next) => {
+    console.log(`Static file request: ${req.url}`);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     next();
-}, express.static('uploads')); // Changed to use relative path
+}, express.static('uploads'));
 
 // Serve static files from client's public directory
 app.use(express.static(path.join(__dirname, '../client/public')));

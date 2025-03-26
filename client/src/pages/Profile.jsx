@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Rating } from '@mui/material';
 import '../styles/Profile.css';
 import defaultImageUrl from '../assets/DefaultImage.jpg';
 
@@ -36,7 +38,9 @@ const ReviewCardSkeleton = () => (
 );
 
 const Profile = () => {
-    const { user, isAdmin } = useAuth();
+    const { id } = useParams();
+    const { user: currentUser, isAdmin } = useAuth();
+    const [profileUser, setProfileUser] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -52,29 +56,34 @@ const Profile = () => {
     const [editError, setEditError] = useState('');
     const [editSuccess, setEditSuccess] = useState('');
 
+    const isOwnProfile = currentUser && (!id || id === currentUser.id);
+
     useEffect(() => {
-        const fetchReviews = async () => {
+        const fetchUserData = async () => {
             try {
+                const userId = id || currentUser.id;
                 const token = localStorage.getItem('token');
                 if (!token) {
                     throw new Error('No authentication token found');
                 }
 
-                const response = await fetch(`http://localhost:5000/api/reviews/user/${user.id}`, {
+                const userResponse = await fetch(`http://localhost:5000/api/users/${userId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                if (!userResponse.ok) throw new Error('User not found');
+                const userData = await userResponse.json();
+                setProfileUser(userData);
 
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        throw new Error('Authentication failed. Please log in again.');
+                const reviewsResponse = await fetch(`http://localhost:5000/api/reviews/user/${userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
                     }
-                    throw new Error('Failed to fetch reviews');
-                }
-
-                const data = await response.json();
-                setReviews(data);
+                });
+                if (!reviewsResponse.ok) throw new Error('Failed to fetch reviews');
+                const reviewsData = await reviewsResponse.json();
+                setReviews(reviewsData);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -82,15 +91,15 @@ const Profile = () => {
             }
         };
 
-        if (user) {
-            fetchReviews();
+        if (currentUser) {
+            fetchUserData();
         }
-    }, [user]);
+    }, [id, currentUser]);
 
     const handleEditClick = () => {
         setEditData({
-            username: user.username,
-            email: user.email,
+            username: profileUser.username,
+            email: profileUser.email,
             currentPassword: '',
             newPassword: '',
             confirmPassword: '',
@@ -109,7 +118,6 @@ const Profile = () => {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Create a preview URL for the selected image
             const previewUrl = URL.createObjectURL(file);
             setEditData({
                 ...editData,
@@ -121,6 +129,14 @@ const Profile = () => {
 
     const handleImageError = (e) => {
         e.target.src = defaultImageUrl;
+        e.target.onerror = null;
+    };
+
+    const getProfilePictureUrl = (profilePicture) => {
+        if (!profilePicture) {
+            return defaultImageUrl;
+        }
+        return `http://localhost:5000${profilePicture}`;
     };
 
     const handleSubmit = async (e) => {
@@ -128,7 +144,6 @@ const Profile = () => {
         setEditError('');
         setEditSuccess('');
 
-        // Validate password if trying to change it
         if (editData.newPassword) {
             if (editData.newPassword.length < 6) {
                 setEditError('New password must be at least 6 characters long');
@@ -157,7 +172,7 @@ const Profile = () => {
                 formData.append('profilePicture', editData.profilePicture);
             }
 
-            const response = await fetch(`http://localhost:5000/api/users/${user.id}`, {
+            const response = await fetch(`http://localhost:5000/api/users/${currentUser.id}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -176,34 +191,55 @@ const Profile = () => {
 
             setEditSuccess('Profile updated successfully! Please check your email to confirm the changes.');
             setIsEditing(false);
+            window.location.reload();
         } catch (err) {
             setEditError(err.message);
         }
     };
 
-    if (!user) {
-        return <div className="profile-page">Please log in to view your profile.</div>;
+    if (!currentUser) {
+        return <div className="profile-page">Please log in to view profiles.</div>;
     }
+
+    if (loading) {
+        return (
+            <div className="profile-page">
+                <div className="profile-container">
+                    <ProfileSkeleton />
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return <div className="profile-page">Error: {error}</div>;
+    }
+
+    if (!profileUser) {
+        return <div className="profile-page">User not found</div>;
+    }
+
+    const averageRating = reviews.length > 0
+        ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
+        : 'No ratings';
 
     return (
         <div className="profile-page">
             <div className="profile-container">
                 <div className="profile-header">
-                    <h1>My Profile</h1>
-                    {!loading && (
+                    <h1>{isOwnProfile ? 'My Profile' : `${profileUser.username}'s Profile`}</h1>
+                    {isOwnProfile && !loading && (
                         <button onClick={handleEditClick} className="edit-button">
                             Edit
                         </button>
                     )}
                 </div>
 
-                {loading ? (
-                    <ProfileSkeleton />
-                ) : isEditing ? (
+                {isEditing ? (
                     <form onSubmit={handleSubmit} className="edit-form">
                         <div className="profile-picture-section">
                             <img 
-                                src={editData.profilePicturePreview || (user.profilePicture ? `http://localhost:5000${user.profilePicture}` : defaultImageUrl)}
+                                src={editData.profilePicturePreview || getProfilePictureUrl(profileUser.profilePicture)}
                                 alt="Profile" 
                                 className="profile-picture"
                                 onError={handleImageError}
@@ -289,7 +325,7 @@ const Profile = () => {
                     <div className="profile-info">
                         <div className="profile-picture-section">
                             <img 
-                                src={user.profilePicture ? `http://localhost:5000${user.profilePicture}` : defaultImageUrl}
+                                src={getProfilePictureUrl(profileUser.profilePicture)}
                                 alt="Profile" 
                                 className="profile-picture"
                                 onError={handleImageError}
@@ -299,15 +335,15 @@ const Profile = () => {
 
                         <div className="info-group">
                             <label>Username</label>
-                            <p>{user.username}</p>
+                            <p>{profileUser.username}</p>
                         </div>
 
                         <div className="info-group">
                             <label>Email</label>
-                            <p>{user.email}</p>
+                            <p>{profileUser.email}</p>
                         </div>
 
-                        {isAdmin && (
+                        {profileUser.isAdmin && (
                             <div className="info-group">
                                 <label>Role</label>
                                 <p>Admin</p>
@@ -315,14 +351,24 @@ const Profile = () => {
                         )}
 
                         <div className="info-group">
+                            <label>Member Since</label>
+                            <p>{new Date(profileUser.createdAt).toLocaleDateString()}</p>
+                        </div>
+
+                        <div className="info-group">
                             <label>Reviews</label>
                             <p>{reviews.length} reviews</p>
+                        </div>
+
+                        <div className="info-group">
+                            <label>Average Rating</label>
+                            <p>{averageRating}</p>
                         </div>
                     </div>
                 )}
 
                 <div className="reviews-section">
-                    <h2>My Reviews</h2>
+                    <h2>{isOwnProfile ? 'My Reviews' : `Reviews by ${profileUser.username}`}</h2>
                     {loading ? (
                         <div className="reviews-list">
                             {[...Array(3)].map((_, index) => (
@@ -332,21 +378,31 @@ const Profile = () => {
                     ) : error ? (
                         <p className="error-message">{error}</p>
                     ) : reviews.length === 0 ? (
-                        <p>You haven't written any reviews yet.</p>
+                        <p>{isOwnProfile ? "You haven't written any reviews yet." : `${profileUser.username} hasn't written any reviews yet.`}</p>
                     ) : (
                         <div className="reviews-list">
                             {reviews.map(review => (
                                 <div key={review._id} className="review-card">
-                                    <h3>{review.restaurant.name}</h3>
-                                    <div className="rating">
-                                        {[...Array(5)].map((_, index) => (
-                                            <span key={index} className={`star ${index < review.rating ? 'filled' : ''}`}>
-                                                ★
-                                            </span>
-                                        ))}
+                                    <div className="review-header">
+                                        <div className="restaurant-info">
+                                            <img 
+                                                src={review.restaurant.imageUrl ? `http://localhost:5000${review.restaurant.imageUrl}` : defaultImageUrl}
+                                                alt={review.restaurant.name}
+                                                className="restaurant-image"
+                                                onError={(e) => e.target.src = defaultImageUrl}
+                                                crossOrigin="anonymous"
+                                            />
+                                            <div>
+                                                <h3>{review.restaurant.name}</h3>
+                                                <p className="cuisine">{review.restaurant.cuisine}</p>
+                                            </div>
+                                        </div>
+                                        <Rating value={review.rating} readOnly precision={0.5} />
                                     </div>
-                                    <p>{review.text}</p>
-                                    <small>{new Date(review.createdAt).toLocaleDateString()}</small>
+                                    <p className="review-comment">{review.comment}</p>
+                                    <span className="review-date">
+                                        {new Date(review.createdAt).toLocaleDateString()}
+                                    </span>
                                 </div>
                             ))}
                         </div>

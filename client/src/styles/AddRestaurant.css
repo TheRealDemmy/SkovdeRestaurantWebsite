@@ -174,16 +174,14 @@
 }
 
 .image-preview {
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    overflow: hidden;
-    max-width: 300px;
+    margin-top: 0.5rem;
+    max-width: 200px;
 }
 
 .image-preview img {
     width: 100%;
     height: auto;
-    display: block;
+    border-radius: 4px;
 }
 
 .image-upload-container input[type="file"] {
@@ -195,4 +193,21 @@
     color: #666;
     font-size: 0.875rem;
     margin-top: 0.25rem;
+}
+
+.map-container {
+    margin: 1rem 0;
+}
+
+.map-wrapper {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.map-instructions {
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
 } 

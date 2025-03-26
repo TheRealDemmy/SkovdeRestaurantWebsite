@@ -25,13 +25,17 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    reviews: {
+    reviewCount: {
         type: Number,
         default: 0
     },
+    reviewIds: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review'
+    }],
     profilePicture: {
         type: String,
-        default: '/DefaultImage.jpg'
+        default: null
     },
     createdAt: {
         type: Date,

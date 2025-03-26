@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Rating } from '@mui/material';
+import { Rating, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import '../styles/Restaurant.css';
+import defaultImageUrl from '../assets/DefaultImage.jpg';
 
 const Restaurant = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const { isAuthenticated, user } = useAuth();
     const [restaurant, setRestaurant] = useState(null);
     const [reviews, setReviews] = useState([]);
@@ -15,6 +18,7 @@ const Restaurant = () => {
         rating: 0,
         comment: ''
     });
+    const [formError, setFormError] = useState(null);  // New state for form-specific errors
 
     useEffect(() => {
         const fetchRestaurantData = async () => {
@@ -29,7 +33,7 @@ const Restaurant = () => {
                 const reviewsData = await reviewsResponse.json();
                 setReviews(reviewsData);
             } catch (err) {
-                setError(err.message);
+                console.error('Error fetching data:', err);
             } finally {
                 setLoading(false);
             }
@@ -38,10 +42,21 @@ const Restaurant = () => {
         fetchRestaurantData();
     }, [id]);
 
+    const handleImageError = (e) => {
+        e.target.src = defaultImageUrl;
+        e.target.onerror = null;
+    };
+
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
         if (!isAuthenticated) {
-            setError('Please log in to submit a review');
+            setFormError('Please log in to submit a review');
+            return;
+        }
+
+        // Validate rating
+        if (newReview.rating === 0) {
+            setFormError('Please select a rating before submitting your review');
             return;
         }
 
@@ -54,24 +69,65 @@ const Restaurant = () => {
                 },
                 body: JSON.stringify({
                     restaurantId: id,
-                    userId: user.id,
+                    userId: user._id,
                     rating: newReview.rating,
                     comment: newReview.comment
                 })
             });
 
-            if (!response.ok) throw new Error('Failed to submit review');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to submit review');
+            }
 
-            const newReviewData = await response.json();
-            setReviews([...reviews, newReviewData]);
+            // If successful, clear the form and fetch updated reviews
             setNewReview({ rating: 0, comment: '' });
+            setFormError(null);
+            
+            const reviewsResponse = await fetch(`http://localhost:5000/api/reviews/restaurant/${id}`);
+            if (!reviewsResponse.ok) {
+                console.error('Failed to fetch updated reviews');
+                return;
+            }
+            const reviewsData = await reviewsResponse.json();
+            setReviews(reviewsData);
         } catch (err) {
-            setError(err.message);
+            setFormError(err.message);
+        }
+    };
+
+    const handleDeleteReview = async (reviewId) => {
+        if (!user.isAdmin) return;
+
+        try {
+            const response = await fetch(`http://localhost:5000/api/reviews/${reviewId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete review');
+            }
+
+            // If successful, fetch updated reviews
+            setFormError(null);
+            
+            const reviewsResponse = await fetch(`http://localhost:5000/api/reviews/restaurant/${id}`);
+            if (!reviewsResponse.ok) {
+                console.error('Failed to fetch updated reviews');
+                return;
+            }
+            const reviewsData = await reviewsResponse.json();
+            setReviews(reviewsData);
+        } catch (err) {
+            setFormError(err.message);
         }
     };
 
     if (loading) return <div className="restaurant-page">Loading...</div>;
-    if (error) return <div className="restaurant-page">Error: {error}</div>;
     if (!restaurant) return <div className="restaurant-page">Restaurant not found</div>;
 
     const averageRating = reviews.length > 0
@@ -82,10 +138,11 @@ const Restaurant = () => {
         <div className="restaurant-page">
             <div className="restaurant-header">
                 <img 
-                    src={restaurant.imageUrl || '/DefaultImage.jpg'} 
+                    src={restaurant.imageUrl ? `http://localhost:5000${restaurant.imageUrl}` : defaultImageUrl} 
                     alt={restaurant.name}
                     className="restaurant-image"
-                    onError={(e) => e.target.src = '/DefaultImage.jpg'}
+                    onError={handleImageError}
+                    crossOrigin="anonymous"
                 />
                 <div className="restaurant-info">
                     <h1>{restaurant.name}</h1>
@@ -106,9 +163,15 @@ const Restaurant = () => {
                         <div className="rating-input">
                             <Rating
                                 value={newReview.rating}
-                                onChange={(_, value) => setNewReview({ ...newReview, rating: value })}
+                                onChange={(_, value) => {
+                                    setNewReview({ ...newReview, rating: value });
+                                    setFormError(null); // Clear error when rating is selected
+                                }}
                                 precision={0.5}
                             />
+                            {formError && formError.includes('rating') && (
+                                <p className="rating-error">Please select a rating</p>
+                            )}
                         </div>
                         <textarea
                             value={newReview.comment}
@@ -116,6 +179,9 @@ const Restaurant = () => {
                             placeholder="Share your experience..."
                             required
                         />
+                        {formError && !formError.includes('rating') && (
+                            <p className="form-error">{formError}</p>
+                        )}
                         <button type="submit" className="submit-review">Submit Review</button>
                     </form>
                 </div>
@@ -130,14 +196,28 @@ const Restaurant = () => {
                                 <div className="review-header">
                                     <div className="reviewer-info">
                                         <img 
-                                            src={review.user.profilePicture || '/DefaultImage.jpg'} 
+                                            src={review.user.profilePicture ? `http://localhost:5000${review.user.profilePicture}` : defaultImageUrl} 
                                             alt={review.user.username}
                                             className="reviewer-image"
-                                            onError={(e) => e.target.src = '/DefaultImage.jpg'}
+                                            onError={handleImageError}
+                                            crossOrigin="anonymous"
                                         />
-                                        <span className="reviewer-name">{review.user.username}</span>
+                                        <Link to={`/profile/${review.user._id}`} className="reviewer-name">
+                                            {review.user.username}
+                                        </Link>
                                     </div>
-                                    <Rating value={review.rating} readOnly precision={0.5} />
+                                    <div className="review-actions">
+                                        <Rating value={review.rating} readOnly precision={0.5} />
+                                        {user.isAdmin && (
+                                            <IconButton 
+                                                onClick={() => handleDeleteReview(review._id)}
+                                                className="delete-review-button"
+                                                size="small"
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        )}
+                                    </div>
                                 </div>
                                 <p className="review-comment">{review.comment}</p>
                                 <span className="review-date">

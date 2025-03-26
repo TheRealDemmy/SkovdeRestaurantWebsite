@@ -6,6 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const Review = require('../models/Review');
+const fs = require('fs');
 
 // Configure multer for file upload
 const storage = multer.diskStorage({
@@ -149,6 +150,14 @@ router.put('/:userId', verifyToken, upload.single('profilePicture'), async (req,
         
         // Handle profile picture upload
         if (req.file) {
+            console.log('Profile picture uploaded:', req.file);
+            // Delete old profile picture if it exists
+            if (user.profilePicture) {
+                const oldFilePath = path.join(__dirname, '..', user.profilePicture);
+                if (fs.existsSync(oldFilePath)) {
+                    fs.unlinkSync(oldFilePath);
+                }
+            }
             updates.profilePicture = `/uploads/profiles/${req.file.filename}`;
         }
 
@@ -195,6 +204,7 @@ router.put('/:userId', verifyToken, upload.single('profilePicture'), async (req,
         Object.assign(user, updates);
         await user.save();
 
+        // Return updated user data without sensitive information
         res.json({
             message: 'Profile updated successfully.',
             user: {
