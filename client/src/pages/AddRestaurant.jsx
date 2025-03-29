@@ -299,20 +299,7 @@ const AddRestaurant = () => {
                                 <img src={imagePreview} alt="Preview" />
                             </div>
                         )}
-                    </div>
-
-                    <div className="form-group checkbox-group">
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="isFeatured"
-                                checked={formData.isFeatured}
-                                onChange={handleChange}
-                                disabled={isLoading}
-                            />
-                            Featured Restaurant
-                        </label>
-                    </div>
+                    </div>     
 
                     {error && <div className="error-message">{error}</div>}
 

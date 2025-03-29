@@ -382,7 +382,11 @@ const Profile = () => {
                     ) : (
                         <div className="reviews-list">
                             {reviews.map(review => (
-                                <div key={review._id} className="review-card">
+                                <div 
+                                    key={review._id} 
+                                    className="review-card"
+                                    onClick={() => window.location.href = `/restaurant/${review.restaurant._id}`}
+                                >
                                     <div className="review-header">
                                         <div className="restaurant-info">
                                             <img 

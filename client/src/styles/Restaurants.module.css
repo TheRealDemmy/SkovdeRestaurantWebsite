@@ -1,0 +1,153 @@
+.restaurantsPage {
+    padding: 3rem;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.restaurantsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.restaurantsContainer h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.searchContainer {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.restaurantsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.restaurantCard {
+    background: var(--header-blue);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurantCard:hover {
+    transform: translateY(-5px);
+}
+
+.restaurantImageContainer {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.restaurantImageContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.restaurantCard:hover .restaurantImageContainer img {
+    transform: scale(1.05);
+}
+
+.restaurantInfo {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+.restaurantName {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.restaurantRating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ratingText {
+    color: white;
+    font-size: 0.9rem;
+}
+
+.restaurantTags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.priceTag {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.cuisineTag {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.noResults {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loading, .error {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .restaurantsPage {
+        padding: 1rem;
+    }
+
+    .restaurantsGrid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .restaurantImageContainer {
+        height: 180px;
+    }
+
+    .restaurantName {
+        font-size: 1.1rem;
+    }
+} 

@@ -6,6 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const Review = require('../models/Review');
+const fs = require('fs');
 
 // Configure multer for file upload
 const storage = multer.diskStorage({
@@ -147,6 +148,13 @@ router.put('/:id', verifyToken, verifyAdmin, upload.single('image'), async (req,
         
         // Only update imageUrl if a new image was uploaded
         if (req.file) {
+            // Delete old image if it exists
+            if (restaurant.imageUrl && restaurant.imageUrl !== '/DefaultImage.jpg') {
+                const oldImagePath = path.join(__dirname, '..', 'uploads', 'restaurants', path.basename(restaurant.imageUrl));
+                if (fs.existsSync(oldImagePath)) {
+                    fs.unlinkSync(oldImagePath);
+                }
+            }
             updates.imageUrl = `/uploads/restaurants/${req.file.filename}`;
         }
 
@@ -174,6 +182,14 @@ router.delete('/:id', verifyAdmin, async (req, res) => {
         const restaurant = await Restaurant.findById(req.params.id);
         if (!restaurant) {
             return res.status(404).json({ message: 'Restaurant not found' });
+        }
+
+        // Delete restaurant image if it exists
+        if (restaurant.imageUrl && restaurant.imageUrl !== '/DefaultImage.jpg') {
+            const imagePath = path.join(__dirname, '..', 'uploads', 'restaurants', path.basename(restaurant.imageUrl));
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
         }
 
         // Delete all reviews for this restaurant

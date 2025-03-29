@@ -158,7 +158,7 @@ router.put('/:userId', verifyToken, upload.single('profilePicture'), async (req,
                     fs.unlinkSync(oldFilePath);
                 }
             }
-            updates.profilePicture = `/uploads/profiles/${req.file.filename}`;
+            updates.profilePicture = `/uploads/users/${req.file.filename}`;
         }
 
         // If email is being changed, send confirmation email
@@ -229,11 +229,19 @@ router.delete('/:id', verifyToken, verifyAdmin, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Delete profile picture if it exists
+        if (user.profilePicture && user.profilePicture !== '/assets/default-profile.jpg') {
+            const picturePath = path.join(__dirname, '..', 'uploads', 'users', path.basename(user.profilePicture));
+            if (fs.existsSync(picturePath)) {
+                fs.unlinkSync(picturePath);
+            }
+        }
+
         // Delete all reviews by this user
         await Review.deleteMany({ user: user._id });
 
         // Delete the user
-        await User.deleteOne({ _id: user._id });
+        await User.deleteOne({ _id: req.params.id });
 
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
@@ -280,6 +288,35 @@ router.get('/confirm-email/:token', async (req, res) => {
         res.json({ message: 'Email updated successfully.' });
     } catch (error) {
         res.status(400).json({ message: 'Invalid or expired token.' });
+    }
+});
+
+// Update user profile picture
+router.put('/:id/profile-picture', verifyToken, upload.single('profilePicture'), async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Delete old profile picture if it exists
+        if (user.profilePicture && user.profilePicture !== '/assets/default-profile.jpg') {
+            const oldPicturePath = path.join(__dirname, '..', 'uploads', 'users', path.basename(user.profilePicture));
+            if (fs.existsSync(oldPicturePath)) {
+                fs.unlinkSync(oldPicturePath);
+            }
+        }
+
+        // Update with new profile picture
+        if (req.file) {
+            user.profilePicture = `/uploads/users/${req.file.filename}`;
+            await user.save();
+            res.json({ message: 'Profile picture updated successfully', profilePicture: user.profilePicture });
+        } else {
+            res.status(400).json({ message: 'No file uploaded' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
