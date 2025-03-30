@@ -37,7 +37,6 @@ const Header = () => {
                 <div className={`dropdown-menu ${showMenu ? 'show' : ''}`}>
                     <Link to="/" className="dropdown-link">Home</Link>
                     <Link to="/restaurants" className="dropdown-link">Restaurants</Link>
-                    <Link to="/about" className="dropdown-link">About Us</Link>
                     <Link to="/contact" className="dropdown-link">Contact</Link>
                     {!isAuthenticated ? (
                         <Link to="/signup" className="dropdown-link">Sign Up</Link>

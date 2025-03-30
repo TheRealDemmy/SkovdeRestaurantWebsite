@@ -303,9 +303,18 @@ const AddRestaurant = () => {
 
                     {error && <div className="error-message">{error}</div>}
 
-                    <button type="submit" className="submit-button" disabled={isLoading}>
-                        {isLoading ? 'Creating...' : 'Create Restaurant'}
-                    </button>
+                    <div className="form-actions">
+                        <button type="submit" className="submit-button" disabled={isLoading}>
+                            {isLoading ? 'Creating...' : 'Create Restaurant'}
+                        </button>
+                        <button 
+                            type="button" 
+                            className="cancel-button"
+                            onClick={() => navigate(-1)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

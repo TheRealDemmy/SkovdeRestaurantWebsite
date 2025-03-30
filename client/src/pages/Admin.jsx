@@ -10,6 +10,7 @@ const Admin = () => {
     const [restaurants, setRestaurants] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [reviews, setReviews] = useState({});
     const navigate = useNavigate();
     const { isAdmin } = useAuth();
 
@@ -38,9 +39,11 @@ const Admin = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                if (!response.ok) throw new Error('Failed to fetch users');
                 const data = await response.json();
-                if (!response.ok) throw new Error(data.message || 'Failed to fetch users');
                 setUsers(data);
+                // Fetch reviews for each user
+                data.forEach(user => fetchUserReviews(user._id));
             } else {
                 const response = await fetch('http://localhost:5000/api/restaurants', {
                     headers: {
@@ -56,6 +59,29 @@ const Admin = () => {
             setError(err.message || 'An error occurred while fetching data');
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const fetchUserReviews = async (userId) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:5000/api/reviews/user/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) throw new Error('Failed to fetch user reviews');
+            const data = await response.json();
+            setReviews(prev => ({
+                ...prev,
+                [userId]: data.length
+            }));
+        } catch (error) {
+            console.error('Error fetching user reviews:', error);
+            setReviews(prev => ({
+                ...prev,
+                [userId]: 0
+            }));
         }
     };
 
@@ -157,6 +183,8 @@ const Admin = () => {
     return (
         <div className="admin-page">
             <div className="admin-container">
+                <h1>Admin Dashboard</h1>
+
                 <div className="admin-tabs">
                     <button
                         className={`tab-button ${activeTab === 'users' ? 'active' : ''}`}
@@ -197,7 +225,7 @@ const Admin = () => {
                                     <td>{user.username}</td>
                                     <td>{user.email}</td>
                                     <td>{user.isAdmin ? 'Admin' : 'User'}</td>
-                                    <td>{user.reviews?.length || 0}</td>
+                                    <td>{reviews[user._id] || 0}</td>
                                     <td>
                                         <button
                                             className="action-button edit-button"
